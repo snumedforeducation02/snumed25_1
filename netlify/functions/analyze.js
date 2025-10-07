@@ -151,6 +151,15 @@ exports.handler = async (event) => {
     };
 
     // '기타 이수 과목' 섹션은 여기서 제거되었습니다.
+     const courseCandidates = allText.match(/[a-zA-Z0-9가-힣]{2,}/g) || [];
+    const uniqueCourses = [...new Set(courseCandidates)];
+    const otherCompletedCourses = uniqueCourses.filter(course => !allRequiredCourseNames.has(course));
+    analysisResult["기타 이수 과목"] = {
+        description: "수료 기준에 포함되지 않은 이수 과목 목록입니다.",
+        completed: otherCompletedCourses,
+        displayType: 'list_completed_only'
+    };
+
 
     // 5. 최종 분석 결과 전송
     return {
