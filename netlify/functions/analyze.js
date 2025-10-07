@@ -11,9 +11,9 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: '분석할 텍스트가 없습니다.' };
     }
 
-// 2. 수료 기준 데이터 파일 읽어오기
-const requirementsPath = path.join(__dirname, '..', '..', 'requirements.json');
-const requirementsData = JSON.parse(fs.readFileSync(requirementsPath, 'utf8'));
+    // 2. 수료 기준 데이터 파일 읽어오기
+    const requirementsPath = path.join(__dirname, '..', '..', 'requirements.json');
+    const requirementsData = JSON.parse(fs.readFileSync(requirementsPath, 'utf8'));
 
     // 3. 분석 로직 시작
     const analysisResult = {};
