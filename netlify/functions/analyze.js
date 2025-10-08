@@ -155,8 +155,8 @@ exports.handler = async (event) => {
     }
 
     // 4. 기타 수료 요건 처리
-    analysisResult["기타 수료 요건"] = {
-        description: "시간표 외 수료 요건 달성 현황입니다.",
+    analysisResult["비교과"] = {
+        description: "비교과 수료 요건 달성 현황입니다.",
         data: checklist,
         displayType: 'checklist'
     };
