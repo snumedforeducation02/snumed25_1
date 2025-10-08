@@ -60,7 +60,7 @@ h1 {
     background-color: #f9f9f9;  /* 박스 배경색 */
     border: 1px solid #e0e0e0;      /* 박스 테두리 */
     border-radius: 8px;             /* 박스 모서리를 둥글게 */
-    padding: 10px;                  /* 박스 안쪽 여백 */
+    padding: 20px;                  /* 박스 안쪽 여백 */
     margin-bottom: 20px;            /* 박스와 박스 사이의 간격 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 은은한 그림자 효과 */
 }
