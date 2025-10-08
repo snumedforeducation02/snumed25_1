@@ -79,8 +79,14 @@ analyzeButton.addEventListener('click', async () => {
 // 분석 결과를 HTML로 만들어 화면에 표시하는 함수
 function displayResults(data) {
     let html = '<h2>🔍 분석 결과</h2>';
-    const categoryOrder = ["전공 필수", "전공 선택", "필수 교양", "학문의 세계", "예체능", "기타 이수 과목"];
-
+    const categoryOrder = ["전공 필수", "전공 선택", "필수 교양", "학문의 세계", "예체능", "기타 이수 과목", "비교과"];
+    const checklistLabels = {
+        'volunteer': '60시간 이상의 봉사활동 (보라매병원 포함)', 'cpr': 'CPR 교육 이수',
+        'leadership': '인성·리더십 교육 모듈1, 모듈2 이수', 'reading': '독서 일기 20편 이상 제출',
+        'human': '인문사회계열 과목 20학점 이상 이수', 'study': '의학 연구의 실제(전선, 3학점) 수강',
+        'cpm': 'CPM(맞춤형 교육과정) 이수', 'teps': 'TEPS 453점, IBT TOEFL 114점 이상'
+    };
+    
     for (const category of categoryOrder) {
         if (!data[category]) continue;
         const details = data[category];
@@ -144,6 +150,49 @@ function displayResults(data) {
                   html += `<p>이수한 과목이 없습니다.</p>`;
                 }
                 break;
+                
+                // ... switch (details.displayType) ...
+                case 'checklist':
+                // 필수/선택 요건의 키 목록을 직접 정의
+                const requiredKeys = ['volunteer', 'cpr', 'leadership', 'reading'];
+                
+                const reqCompleted = [];
+                const reqIncomplete = [];
+                const elecCompleted = [];
+                const requiredElecCount = 2;
+
+                for (const key in details.data) {
+                    const label = checklistLabels[key];
+                    // 키가 필수 요건 목록에 포함되는지 확인
+                    if (requiredKeys.includes(key)) {
+                        if (details.data[key]) {
+                            reqCompleted.push(label);
+                        } else {
+                            reqIncomplete.push(label);
+                        }
+                    } else { // 필수가 아니면 선택 요건으로 간주
+                        if (details.data[key]) {
+                            elecCompleted.push(label);
+                        }
+                    }
+                }
+
+                // --- (이후 HTML 생성 부분은 이전과 동일합니다) ---
+                html += `<p><strong>✅ 완료한 필수 요건:</strong> ${reqCompleted.length > 0 ? reqCompleted.join(', ') : '없음'}</p>`;
+                html += `<p><strong>📝 남은 필수 요건:</strong> ${reqIncomplete.length > 0 ? reqIncomplete.join(', ') : '모두 완료'}</p>`;
+                
+                const neededElecCount = Math.max(0, requiredElecCount - elecCompleted.length);
+                const isElecCompleted = neededElecCount === 0;
+
+                html += `<p class="summary ${isElecCompleted ? 'completed' : 'in-progress'}">
+                            <strong>선택 요건 상태: ${requiredElecCount}개 이상 중 ${elecCompleted.length}개 완료 (${neededElecCount}개 더 필요) ${isElecCompleted ? '✔️' : ''}</strong>
+                         </p>`;
+                if (elecCompleted.length > 0) {
+                    html += `<p><strong>✅ 완료한 선택 요건:</strong> ${elecCompleted.join(', ')}</p>`;
+                }
+                break;
+                
+// ...
         }
         html += `</div></div>`;
     }
