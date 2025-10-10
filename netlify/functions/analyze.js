@@ -69,9 +69,7 @@ exports.handler = async (event) => {
 
             // analyze.js
 
-            // analyze.js
-
-            // analyze.js
+           // analyze.js
 
             case "필수 교양":
                 displayType = 'list_all'; 
@@ -82,29 +80,35 @@ exports.handler = async (event) => {
                     "산스크리트어", "베트남어", "아랍어", "힌디어", "일본어",
                     "독문 강독"
                 ];
+                const specialCourses = [
+                    "대학 글쓰기 1", 
+                    "대학 글쓰기 2: 과학기술글쓰기", 
+                    "생물학", 
+                    "생물학실험"
+                ];
 
-                // --- 특별 처리 과목 목록 정의 ---
-                const collegeWriting1 = "대학 글쓰기 1";
-                const collegeWriting2 = "대학 글쓰기 2: 과학기술글쓰기";
-                const biology = "생물학";
-                const biologyLab = "생물학실험";
-                const specialCourses = [collegeWriting1, collegeWriting2, biology, biologyLab];
+                // 1. 일반 과목 목록부터 먼저 분류합니다. (외국어, 특별 과목 제외)
+                const otherCourses = categoryData.courses.filter(course => {
+                    const courseName = typeof course === 'object' ? course.name : course;
+                    return !foreignLanguages.includes(courseName) && !specialCourses.includes(courseName);
+                });
 
-                // --- '대학 글쓰기' 특별 처리 ---
-                if (allText.includes("과학기술글")) {
-                    completed.push(collegeWriting2);
-                } else if (allText.includes("대학") && allText.includes("글쓰")) {
-                    completed.push(collegeWriting1);
+                // 2. '대학 글쓰기', '생물학' 등 특별 과목을 먼저 처리합니다.
+                const hasBaseWriting = allText.includes("대학") && allText.includes("글쓰");
+                if (hasBaseWriting) {
+                    if (allText.includes("과학기술글")) {
+                        completed.push("대학 글쓰기 2: 과학기술글쓰기");
+                    } else {
+                        completed.push("대학 글쓰기 1");
+                    }
                 }
-
-                // --- '생물학' 및 '생물학실험' 특별 처리 ---
-                if (allText.includes("생물학실")) { // '생물학실험', '생물학실' 등 모두 포함
-                    completed.push(biologyLab);
+                if (allText.includes("생물학실")) {
+                    completed.push("생물학실험");
                 } else if (allText.includes("생물학")) {
-                    completed.push(biology);
+                    completed.push("생물학");
                 }
                 
-                // 특별 처리 과목들의 미이수 목록 생성
+                // 특별 처리 과목 중 미이수 항목을 remaining에 추가
                 specialCourses.forEach(course => {
                     allRequiredCourseNames.add(course);
                     if (!completed.includes(course)) {
@@ -112,12 +116,7 @@ exports.handler = async (event) => {
                     }
                 });
                 
-                // --- 나머지 과목 처리 ---
-                const otherCourses = categoryData.courses.filter(c => 
-                    !foreignLanguages.includes(c) && !specialCourses.includes(c)
-                );
-
-                // 외국어 이수 여부 확인
+                // 3. 외국어 그룹을 처리합니다.
                 let foreignLanguageCompleted = false;
                 for (const lang of foreignLanguages) {
                     if (stringSimilarity.findBestMatch(lang, ocrWords).bestMatch.rating > 0.6) {
@@ -127,11 +126,12 @@ exports.handler = async (event) => {
                     }
                 }
                 if (!foreignLanguageCompleted) {
+                    // 미이수한 경우에만 "외국어 (택1)"을 추가
                     remaining.push("외국어 (택1)");
                 }
                 foreignLanguages.forEach(c => allRequiredCourseNames.add(c));
 
-                // 나머지 필수 교양 이수/미이수 확인
+                // 4. 나머지 일반 과목들을 마지막으로 처리합니다.
                 otherCourses.forEach(course => {
                     const courseName = typeof course === 'object' ? course.name : course;
                     allRequiredCourseNames.add(courseName);
