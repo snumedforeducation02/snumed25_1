@@ -136,7 +136,7 @@ exports.handler = async (event) => {
                     const courseName = typeof course === 'object' ? course.name : course;
                     allRequiredCourseNames.add(courseName);
                     const matches = stringSimilarity.findBestMatch(courseName, ocrWords);
-                    if (matches.bestMatch.rating > 0.5) {
+                    if (matches.bestMatch.rating > 0.6) {
                         completed.push(courseName);
                     } else {
                         remaining.push(courseName);
