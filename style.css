@@ -1,6 +1,3 @@
-/* =================================
-   1. 기본 & 전체 레이아웃 스타일
-   ================================= */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     text-align: center;
@@ -57,15 +54,9 @@ h3 {
    3. 입력 요소 스타일
    ================================= */
 
-/* 전공 선택 드롭다운 */
-#elective-courses-select {
-    display: block;
-    margin: 16px auto; /* 위아래 여백 추가 및 중앙 정렬 */
-    width: 100%;
-    min-height: 160px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* 전공 선택 드롭다운 (Choices.js 적용 후 원래 select 숨기기 강화) */
+select#elective-courses-select[multiple] {
+    display: none !important; /* !important 추가 */
 }
 
 /* 비교과 체크리스트 아이템 */
@@ -88,7 +79,7 @@ h3 {
 /* =================================
    4. 버튼 및 상태 표시
    ================================= */
-button {
+button#analyze-button { /* ID 추가하여 구체성 높임 */
     background-color: #007bff;
     color: white;
     border: none;
@@ -97,9 +88,10 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease; /* 부드러운 색상 변경 효과 */
+    margin-top: 20px; /* 위쪽 여백 추가 */
 }
 
-button:hover {
+button#analyze-button:hover {
     background-color: #0056b3;
 }
 
@@ -111,7 +103,40 @@ button:hover {
 }
 
 /* =================================
-   5. 유틸리티 (하이라이트, 숨김 등)
+   5. Choices.js 커스텀 스타일
+   ================================= */
+/* 선택 취소 버튼 텍스트 강제 변경 및 스타일 조정 */
+.choices__list--multiple .choices__item .choices__button {
+    color: transparent; /* 기존 텍스트(Remove item) 숨기기 */
+    position: relative;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    background-image: none;
+    border-left: 1px solid rgba(0,0,0,0.2);
+    margin-left: 8px;
+    border-radius: 0 3px 3px 0;
+}
+.choices__list--multiple .choices__item .choices__button::after {
+    content: '선택 취소'; /* 새로운 텍스트 추가 */
+    color: #007bff; /* 버튼 텍스트 색상 */
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    font-size: 0.8rem;
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
+}
+
+/* 마우스 올렸을 때 효과 (선택 사항) */
+.choices__list--multiple .choices__item .choices__button:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+.choices__list--multiple .choices__item .choices__button:hover::after {
+    color: #0056b3; /* 호버 시 텍스트 색상 변경 */
+}
+
+
+/* =================================
+   6. 유틸리티 (하이라이트, 숨김 등)
    ================================= */
 .highlight {
     background-color: #fff3cd; /* 부드러운 노란색 */
@@ -123,26 +148,60 @@ button:hover {
 
 .hidden {
     display: none;
-}/* style.css */
-
-/* 1. Choices.js가 적용된 원래의 select 태그 숨기기 (강화) */
-/* (사진의 맨 아래 리스트 제거) */
-select[multiple]#elective-courses-select {
-    display: none !important; /* !important를 추가하여 확실하게 숨김 */
 }
 
-/* 2. Choices.js '선택 취소' 버튼 스타일 조정 */
-.choices__list--multiple .choices__item .choices__button {
-    /* 기존 스타일을 일부 덮어씁니다 */
-    padding: 2px 6px;       /* 버튼 내부 여백 줄이기 */
-    font-size: 0.8rem;      /* 버튼 글자 크기 줄이기 */
-    background-image: none; /* 기본 X 아이콘 제거 (텍스트만 보이도록) */
-    border-left: 1px solid rgba(0,0,0,0.2); /* 왼쪽에 구분선 추가 */
-    margin-left: 8px;       /* 태그 이름과 버튼 사이 간격 */
-    border-radius: 0 3px 3px 0; /* 오른쪽 모서리만 둥글게 */
+/* 체크박스를 2열 그리드로 정렬합니다 */
+.checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2개의 동일한 너비의 열 생성 */
+    gap: 10px; /* 항목 사이의 간격 */
+    margin-top: 16px;
 }
 
-/* 마우스 올렸을 때 효과 (선택 사항) */
-.choices__list--multiple .choices__item .choices__button:hover {
-    background-color: rgba(0,0,0,0.1);
+/* 결과 표시 관련 스타일 */
+.category-result h3 {
+    margin-bottom: 15px;
 }
+
+.description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+.result-content {
+    text-align: left;
+}
+.result-content p {
+    margin: 5px 0;
+}
+.summary {
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 10px; /* 상태 요약 위쪽 여백 */
+}
+.summary.completed {
+    background-color: #e7f4e8; /* 연한 초록색 */
+    color: #2b642e;
+}
+.summary.in-progress {
+    background-color: #fff4e5; /* 연한 주황색 */
+    color: #8a6d3b;
+}
+
+/* 로딩 스피너 (선택 사항) */
+#loading .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
