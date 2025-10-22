@@ -119,7 +119,7 @@ button#analyze-button:hover {
 
 /* --- 선택된 과목 태그 스타일 --- */
 .choices__list--multiple .choices__item {
-    background-color: #007bff; /* 태그 배경색 (파란색 계열) */
+    background-color: #d2e6f8; /* 태그 배경색 (파란색 계열) */
     color: white;             /* 태그 글자색 */
     border: none;
     border-radius: 15px;      /* 태그를 둥글게 */
