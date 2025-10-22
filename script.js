@@ -9,7 +9,7 @@ const choices = new Choices(electiveSelectElement, {
     removeItemButton: true,
     placeholder: true,
     // 이 텍스트가 잘리지 않도록 CSS에서 너비를 확보합니다.
-    placeholderValue: '이수 완료한 과목을 선택하세요...',
+    placeholderValue: '이수 완료 과목 선택',
     searchPlaceholderValue: '과목 검색...',
     maxItemCount: 4,
     maxItemText: (maxItemCount) => {
