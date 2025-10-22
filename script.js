@@ -9,12 +9,21 @@ const choices = new Choices(electiveSelectElement, {
     removeItemButton: true,
     placeholder: true,
     // 이 텍스트가 잘리지 않도록 CSS에서 너비를 확보합니다.
-    placeholderValue: '이수 완료 과목 선택',
+    placeholderValue: '수강 과목 선택',
     searchPlaceholderValue: '과목 검색...',
     maxItemCount: 4,
     maxItemText: (maxItemCount) => {
       return `4개까지만 선택할 수 있습니다.`;
     },
+});
+// --- 2. '학문의 세계' Choices.js 초기화 추가 ---
+const academiaSelectElement = document.getElementById('foundations-of-academia-select');
+const academiaChoices = new Choices(academiaSelectElement, {
+    removeItemButton: true,
+    placeholder: true,
+    placeholderValue: '수강 과목 선택',
+    searchPlaceholderValue: '과목 검색...',
+    // 학문의 세계는 개수 제한이 없으므로 maxItemCount 옵션은 제외
 });
 // ===================================
 
@@ -51,11 +60,16 @@ analyzeButton.addEventListener('click', async () => {
         // --- 1-3. 여기에 '필수 교양' 과목을 읽는 코드를 추가합니다 ---
         document.querySelectorAll('#liberal-arts-courses-list input[type="checkbox"]:checked').forEach(checkbox => {
             completedCourses.push(checkbox.value);
+            
+            // --- 1-4. '학문의 세계' 과목 가져오기 추가 ---
+        const selectedAcademia = academiaChoices.getValue(true);
+        completedCourses.push(...selectedAcademia);
+        // ---------------------------------------------
+
+        const allText = completedCourses.join(' ');
         });
         // -------------------------------------------------------------
 
-        // 1-4. 수집된 모든 과목 이름을 하나의 텍스트로 만들기
-        const allText = completedCourses.join(' ');
         // --- 2. 비교과 체크리스트 데이터 수집 ---
         const checklistData = {
             'volunteer': document.getElementById('volunteer').checked,
