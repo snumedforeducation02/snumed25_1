@@ -11,10 +11,6 @@ const choices = new Choices(electiveSelectElement, {
     // 이 텍스트가 잘리지 않도록 CSS에서 너비를 확보합니다.
     placeholderValue: '수강 과목 선택',
     searchPlaceholderValue: '과목 검색...',
-    maxItemCount: 4,
-    maxItemText: (maxItemCount) => {
-      return `4개까지만 선택할 수 있습니다.`;
-    },
 });
 // --- 2. '학문의 세계' Choices.js 초기화 추가 ---
 const academiaSelectElement = document.getElementById('foundations-of-academia-select');
