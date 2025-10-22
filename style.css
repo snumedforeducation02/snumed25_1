@@ -109,25 +109,43 @@ button#analyze-button:hover {
    5. Choices.js 커스텀 스타일
    ================================= */
 
-/* '선택 취소' 버튼 텍스트 강제 변경 */
-.choices__list--multiple .choices__item .choices__button {
-    color: transparent; /* 기존 텍스트 숨기기 */
-    position: relative;
-    padding: 2px 6px;
-    font-size: 0.8rem;
-    background-image: none;
-    border-left: 1px solid rgba(0,0,0,0.2);
-    margin-left: 8px;
-    border-radius: 0 3px 3px 0;
+/* --- Choices.js 입력창 자체 스타일 --- */
+.choices__inner {
+    border-radius: 5px;
+    padding: 7px 7px 4px;
+    /* placeholder 텍스트가 잘리지 않도록 최소 높이를 확보합니다. */
+    min-height: 44px; 
 }
-.choices__list--multiple .choices__item .choices__button::after {
-    content: '선택 취소'; /* 새로운 텍스트 추가 */
-    color: #007bff; /* 버튼 텍스트 색상 */
-    position: absolute;
-    left: 6px;
-    top: 2px;
-    font-size: 0.8rem;
-    white-space: nowrap;
+
+/* --- 선택된 과목 태그 스타일 --- */
+.choices__list--multiple .choices__item {
+    background-color: #007bff; /* 태그 배경색 (파란색 계열) */
+    color: white;             /* 태그 글자색 */
+    border: none;
+    border-radius: 15px;      /* 태그를 둥글게 */
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+/* --- 'X' (선택 취소) 버튼 스타일 수정 (더 크게) --- */
+.choices__list--multiple .choices__item .choices__button {
+    /* 기본 'X' 아이콘 이미지를 사용하고 크기와 색상을 조정합니다. */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMSAyMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjRkZGIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yLjU5Mi4wNDRsMTguMzY0IDE4LjM2NC0yLjU0OCAyLjU0OEwuMDQ0IDIuNTkyeiIvPjxwYXRoIGQ9Ik0uMDQ0IDE4LjQxTDE4LjQxLjA0NGwyLjU0OCAyLjU0OEwyLjU5MiAyMC45NTh6Ii8+PC9nPjwvc3ZnPg==');
+    background-color: transparent;
+    opacity: 0.75;
+    border: none;
+    border-radius: 50%; /* 원형 버튼 */
+    width: 22px;        /* 버튼 너비를 키웁니다 */
+    height: 22px;       /* 버튼 높이를 키웁니다 */
+    margin-left: 8px;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.choices__list--multiple .choices__item .choices__button:hover {
+    opacity: 1; /* 마우스를 올리면 더 진하게 보입니다 */
+    background-color: rgba(0,0,0,0.1); /* 살짝 어두운 배경을 추가합니다 */
 }
 
 /* =================================
