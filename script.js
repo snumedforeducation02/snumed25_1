@@ -3,15 +3,15 @@ const analyzeButton = document.getElementById('analyze-button');
 const resultArea = document.getElementById('result-area');
 const loadingIndicator = document.getElementById('loading');
 
-// === Choices.js 초기화 코드 수정 ===
+// --- Choices.js 초기화 코드 ---
+// 페이지가 로드되자마자 '전공 선택' select 태그를 멋진 UI로 바꿉니다.
 const electiveSelectElement = document.getElementById('elective-courses-select');
 const choices = new Choices(electiveSelectElement, {
     removeItemButton: true,
     placeholder: true,
     placeholderValue: '이수 완료한 과목을 선택하세요...',
     searchPlaceholderValue: '과목 검색...',
-    // 여기에 removeItemText 옵션을 추가합니다.
-    removeItemText: '선택 취소', // 버튼 텍스트 변경
+    removeItemText: '선택 취소', // 'Remove item' 텍스트 변경
 });
 // ===================================
 
