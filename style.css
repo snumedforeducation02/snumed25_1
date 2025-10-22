@@ -147,10 +147,6 @@ button#analyze-button:hover {
     transition: all 0.2s ease;
 }
 
-.choices__list--multiple .choices__item .choices__button:hover {
-    opacity: 1; /* 마우스를 올리면 더 진하게 보입니다 */
-    background-color: rgba(0,0,0,0.1); /* 살짝 어두운 배경을 추가합니다 */
-}
 /* --- (핵심 수정) Placeholder 텍스트 입력창 너비 강제 확장 --- */
 .choices__input {
     width: 100% !important; /* 입력창 너비를 항상 100%로 강제하여 텍스트 잘림 방지 */
