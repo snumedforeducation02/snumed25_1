@@ -245,43 +245,39 @@ function displayResults(data) {
     }
     resultArea.innerHTML = html;
 }
-
-// 페이지 로드 시, '전공 선택'의 초기 전체 목록을 저장해 둡니다.
-let initialElectiveChoices = [];
-// Choices.js가 초기화될 시간을 벌기 위해 잠시 기다립니다.
-setTimeout(() => {
-    initialElectiveChoices = electiveChoices.store.getChoices();
-}, 500);
-
-
 if (electiveSelectElement) {
     electiveSelectElement.addEventListener('addItem', function(event) {
-        const isDuplicateAllowed = event.detail.customProperties?.duplicate === 'true';
+        // 추가된 항목이 "타단과대 전공"인지 확인합니다.
+        if (event.detail.value === '타단과대 전공 (자연대, 농생대, 공대, 수의대, 치대, 혁신공유학부/교양 X)') {
+            // (핵심!) 방금 선택된 "타단과대 전공" 항목을 즉시 제거합니다.
+            // 이렇게 하면 원본 항목이 '사용'되지 않아 목록에서 사라지지 않습니다.
+            electiveChoices.removeActiveItemsByValue(event.detail.value);
 
-        if (isDuplicateAllowed) {
-            // "타단과대 전공"이 선택되면, 최대 선택 개수를 1 늘려줍니다.
+            // 이제 똑같이 생겼지만 고유한 ID를 가진 새로운 항목을 만들어 추가합니다.
+            const uniqueId = '타단과대 전공 (자연대, 농생대, 공대, 수의대, 치대, 혁신공유학부/교양 X)' + Date.now(); // 현재 시간을 이용해 고유 ID 생성
+            const newItem = {
+                value: uniqueId,
+                label: event.detail.label, // 이름은 동일하게 '타단과대 전공(...)'
+                customProperties: {
+                    isDuplicate: true // 중복 항목임을 식별하기 위한 속성
+                }
+            };
+            
+            // 기존에 선택된 다른 과목들과 함께 새로운 항목을 선택 목록에 설정합니다.
+            const currentValues = electiveChoices.getValue();
+            currentValues.push(newItem);
+            electiveChoices.setChoiceByValue(currentValues.map(item => item.value));
+            
+            // 최대 선택 가능 개수를 1 늘려줍니다.
             electiveChoices.config.maxItemCount++;
         }
-        
-        // (핵심!) 어떤 항목이든 추가된 후에, 드롭다운 목록을 초기 상태로 강제 리셋합니다.
-        // 이렇게 하면 "타단과대 전공"이 다시 목록에 나타나고, 다른 항목들은 선택 불가능(비활성화) 상태가 유지됩니다.
-        setTimeout(() => {
-            electiveChoices.setChoices(initialElectiveChoices, 'value', 'label', true);
-        }, 10);
     });
 
     electiveSelectElement.addEventListener('removeItem', function(event) {
-        const isDuplicateAllowed = event.detail.customProperties?.duplicate === 'true';
-
-        if (isDuplicateAllowed) {
-            // "타단과대 전공"이 제거되면, 최대 선택 개수를 다시 1 줄여줍니다.
+        // 제거된 항목이 우리가 만든 중복 항목인지 확인합니다.
+        if (event.detail.customProperties?.isDuplicate) {
+            // 최대 선택 가능 개수를 다시 1 줄여줍니다.
             electiveChoices.config.maxItemCount--;
         }
-        
-        // (핵심!) 어떤 항목이든 제거된 후에, 드롭다운 목록을 초기 상태로 강제 리셋합니다.
-        // 이렇게 하면 방금 제거한 항목이 다시 선택 가능하게 목록에 나타납니다.
-         setTimeout(() => {
-            electiveChoices.setChoices(initialElectiveChoices, 'value', 'label', true);
-        }, 10);
     });
 }
