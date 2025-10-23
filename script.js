@@ -246,39 +246,42 @@ function displayResults(data) {
     resultArea.innerHTML = html;
 }
 
-if (electiveSelectElement) {
-    // 중복을 허용할 특별 항목을 미리 정의해 둡니다.
-    const specialChoice = {
-        value: '타단과대 전공 (자연대, 농생대, 공대, 수의대, 치대, 혁신공유학부/교양 X)',
-        label: '타단과대 전공 (자연대, 농생대, 공대, 수의대, 치대, 혁신공유학부/교양 X)',
-        customProperties: {
-            duplicate: 'true'
-        }
-    };
+// 페이지 로드 시, '전공 선택'의 초기 전체 목록을 저장해 둡니다.
+let initialElectiveChoices = [];
+// Choices.js가 초기화될 시간을 벌기 위해 잠시 기다립니다.
+setTimeout(() => {
+    initialElectiveChoices = electiveChoices.store.getChoices();
+}, 500);
 
+
+if (electiveSelectElement) {
     electiveSelectElement.addEventListener('addItem', function(event) {
         const isDuplicateAllowed = event.detail.customProperties?.duplicate === 'true';
 
         if (isDuplicateAllowed) {
-            // (핵심!) 타이밍 문제를 피하기 위해, 아주 잠깐의 지연 후 항목을 강제로 다시 추가합니다.
-            setTimeout(() => {
-                // 현재 드롭다운에 남아있는 선택지 목록을 가져옵니다.
-                const currentChoices = electiveChoices.store.getChoices();
-                // 특별 항목을 목록에 다시 추가합니다.
-                currentChoices.push(specialChoice);
-                // 변경된 목록으로 드롭다운을 완전히 새로 설정합니다.
-                electiveChoices.setChoices(currentChoices, 'value', 'label', true);
-            }, 10); // 10ms 지연으로 충돌 방지
-
-            // 최대 선택 개수 제한을 일시적으로 늘려줍니다.
+            // "타단과대 전공"이 선택되면, 최대 선택 개수를 1 늘려줍니다.
             electiveChoices.config.maxItemCount++;
         }
+        
+        // (핵심!) 어떤 항목이든 추가된 후에, 드롭다운 목록을 초기 상태로 강제 리셋합니다.
+        // 이렇게 하면 "타단과대 전공"이 다시 목록에 나타나고, 다른 항목들은 선택 불가능(비활성화) 상태가 유지됩니다.
+        setTimeout(() => {
+            electiveChoices.setChoices(initialElectiveChoices, 'value', 'label', true);
+        }, 10);
     });
 
     electiveSelectElement.addEventListener('removeItem', function(event) {
         const isDuplicateAllowed = event.detail.customProperties?.duplicate === 'true';
+
         if (isDuplicateAllowed) {
+            // "타단과대 전공"이 제거되면, 최대 선택 개수를 다시 1 줄여줍니다.
             electiveChoices.config.maxItemCount--;
         }
+        
+        // (핵심!) 어떤 항목이든 제거된 후에, 드롭다운 목록을 초기 상태로 강제 리셋합니다.
+        // 이렇게 하면 방금 제거한 항목이 다시 선택 가능하게 목록에 나타납니다.
+         setTimeout(() => {
+            electiveChoices.setChoices(initialElectiveChoices, 'value', 'label', true);
+        }, 10);
     });
 }
