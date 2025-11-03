@@ -265,6 +265,70 @@ analysisResult["예체능"] = {
     remainingCredits: remainingArtsCredits
 };
 
+      // ======================================================
+// 8. "필수 수료 요건" 분석 (★ 분리)
+// ======================================================
+// (analyze.js 파일의 기존 '8. 비교과' 섹션을 이 코드로 교체하세요)
+
+const requiredChecklistKeys = ['volunteer', 'cpr', 'leadership', 'reading'];
+const completedRequiredChecks = [];
+const remainingRequiredChecks = [];
+
+const requiredLabels = {
+    'volunteer': '60시간 이상의 봉사활동 (보라매병원 포함)',
+    'cpr': 'CPR 교육 이수',
+    'leadership': '인성·리더십 교육 모듈1, 모듈2 이수',
+    'reading': '독서 일기 20편 이상 제출'
+};
+
+requiredChecklistKeys.forEach(key => {
+    if (checklistData[key]) {
+        completedRequiredChecks.push(key);
+    } else {
+        remainingRequiredChecks.push(key);
+    }
+});
+
+analysisResult["필수 수료 요건"] = {
+    description: "다음 4개 요건을 모두 충족해야 합니다.",
+    displayType: "simple_checklist", // ★ 새로운 타입
+    completed: completedRequiredChecks,
+    remaining: remainingRequiredChecks,
+    labels: requiredLabels
+};
+
+// ======================================================
+// 9. "선택 수료 요건" 분석 (★ 분리)
+// ======================================================
+const electiveChecklistKeys = ['human', 'study', 'cpm', 'teps'];
+const completedElectiveChecks = [];
+const requiredElectiveCount = 2;
+
+const electiveLabels = {
+    'human': '인문사회계열 과목 20학점 이상 이수',
+    'study': '의학 연구의 실제(전선, 3학점) 수강',
+    'cpm': 'CPM(맞춤형 교육과정) 이수',
+    'teps': 'TEPS 453점, IBT TOEFL 114점 이상'
+};
+
+electiveChecklistKeys.forEach(key => {
+    if (checklistData[key]) {
+        completedElectiveChecks.push(key);
+    }
+});
+
+const neededElectiveCount = Math.max(0, requiredElectiveCount - completedElectiveChecks.length);
+
+analysisResult["선택 수료 요건"] = {
+    description: `다음 4개 요건 중 2개 이상을 충족해야 합니다.`,
+    displayType: "count_checklist", // ★ 또다른 새로운 타입
+    completed: completedElectiveChecks,
+    completedCount: completedElectiveChecks.length,
+    requiredCount: requiredElectiveCount,
+    neededCount: neededElectiveCount,
+    labels: electiveLabels
+};
+
     // ✅ 최종 반환
     return res.status(200).json({ success: true, analysisResult });
 
