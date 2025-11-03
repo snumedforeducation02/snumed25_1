@@ -266,7 +266,7 @@ button#analyze-button:hover {
 
 /* 2. (공통) 토글 버튼 기본 스타일 */
 .toggle-button {
-    background-color: #bbd8fb;
+    background-color: #3694f7;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -279,7 +279,7 @@ button#analyze-button:hover {
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 .toggle-button:hover {
-    background-color: #bbd8fb;
+    background-color: #3694f7;
 }
 .toggle-button:active {
     transform: scale(0.98);
