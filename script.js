@@ -81,17 +81,18 @@ analyzeButton.addEventListener('click', async () => {
         // 1-6. 예체능
         const selectedArts = artsChoices.getValue(true);
         completedCourses.push(...selectedArts);
+        
         // 1-7. 타단과대
         const otherCollegeCheckbox = document.getElementById('other-college-checkbox');
         const otherCollegeCountInput = document.getElementById('other-college-count');
-        if (otherCollegeCheckbox.checked && otherCollegeCountInput && otherCollegeCountInput.value) {
+        if (otherCollegeCheckbox && otherCollegeCheckbox.checked && otherCollegeCountInput && otherCollegeCountInput.value) {
             const count = parseInt(otherCollegeCountInput.value, 10) || 0;
             for (let i = 0; i < count; i++) {
                 completedCourses.push('타단과대 전공');
             }
         }
         
-        // 1-8. 음미대/미학과 (❗️ 1단계에서 HTML ID를 수정해야 함)
+        // 1-8. 음미대/미학과 (❗️ 1단계에서 HTML ID를 수정했습니다)
         const extraAnSCheckbox = document.getElementById('extra-artsandsports-checkbox');
         const extraAnSCountInput = document.getElementById('extra-artsandsports-count'); 
         
@@ -102,11 +103,11 @@ analyzeButton.addEventListener('click', async () => {
             }
         }
 
-        // ❗️❗️❗️ [버그 수정 1] allText 변수를 모든 수집이 끝난 후 선언
+        // ❗️❗️❗️ [핵심 수정 1] allText 변수를 모든 수집이 끝난 후 선언
         const allText = completedCourses.join(' ');
 
         // --- 2. 비교과 체크리스트 데이터 수집 ---
-        // ❗️❗️❗️ [버그 수정 2] 누락된 비교과 항목 모두 포함
+        // ❗️❗️❗️ [핵심 수정 2] 누락된 비교과 항목 모두 포함
         const checklistData = {
             'volunteer': document.getElementById('volunteer').checked,
             'cpr': document.getElementById('cpr').checked,
@@ -126,7 +127,7 @@ analyzeButton.addEventListener('click', async () => {
         });
 
         if (!response.ok) {
-            // ❗️ 여기가 140번째 줄 근처입니다. 서버가 멈추면 이 코드가 실행됩니다.
+            // ❗️ 여기가 130번째 줄 근처입니다. 서버가 멈추면 이 코드가 실행됩니다.
             throw new Error('서버에서 오류가 발생했습니다.'); 
         }
 
@@ -143,7 +144,7 @@ analyzeButton.addEventListener('click', async () => {
     }
 });
 
-// 분석 결과를 HTML로 만들어 화면에 표시하는 함수
+// 분석 결과를 HTML로 만들어 화면에 표시하는 함수 (수정 없음)
 function displayResults(data) {
     let html = '<h2>🔍 분석 결과</h2>';
     const categoryOrder = ["전공 필수", "전공 선택", "필수 교양", "학문의 세계", "예체능", "기타 이수 과목", "비교과"];
@@ -235,7 +236,7 @@ function displayResults(data) {
                 const elecCompleted = [];
                 const requiredElecCount = 2;
 
-                // [버그 수정 3] 미체크 항목을 올바르게 찾도록 수정
+                // [수정] 미체크 항목을 올바르게 찾도록 수정
                 for (const key in details.data) {
                     if (details.data[key]) { // true (체크된) 항목만 처리
                         const label = checklistLabels[key];
