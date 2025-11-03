@@ -211,6 +211,26 @@ function displayResults(data) {
     }
     break;
 
+                // 이 코드를 displayResults 함수의 switch 문 내부에 추가하세요.
+
+            case 'credit_count': // ★ 새로 추가된 케이스
+                const isCreditsCompleted = details.remainingCredits === 0;
+                
+                html += `<p class="summary ${isCreditsCompleted ? 'completed' : 'in-progress'}">
+                             <strong>상태: ${details.requiredCredits}학점 중 ${details.completedCredits}학점 이수 (${details.remainingCredits}학점 남음) ${isCreditsCompleted ? '✔️' : ''}</strong>
+                         </p>`;
+                
+                if (details.completed.length > 0) {
+                    html += `<p><strong>✅ 이수한 과목:</strong> ${details.completed.join(', ')}</p>`;
+                }
+                
+                if (details.recommended.length > 0 && !isCreditsCompleted) {
+                    // 수료 학점을 다 채우지 못했을 때만 추천 과목을 보여줌
+                    html += `<p><strong>💡 추천 과목:</strong> ${details.recommended.join(', ')}</p>`;
+                }
+                break;
+// --- 여기까지 추가 ---
+
             case 'group_count':
                 const isGroupCompleted = details.completedCount >= details.requiredCount;
                 html += `<p class="summary ${isGroupCompleted ? 'completed' : 'in-progress'}">
