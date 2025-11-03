@@ -129,7 +129,7 @@ export default async function handler(req, res) {
     const remainingCredits = Math.max(0, requiredElectiveCredits - totalElectiveCredits);
 
     analysisResult["전공 선택"] = {
-      description: "12학점 이상 이수해야 합니다. (2학점: 국제의학 등 / 3학점: 나머지)",
+      description: "12학점 이상 이수해야 합니다. (*국제의학의 이해, 몸 속으로의 여행, 세계에술 속 의학의 이해, 통일의료-2학점, 그외 3학점)",
       displayType: "credit_count",
       completed: completedElectiveCourses,
       recommended: recommendedElectiveCourses,
@@ -146,7 +146,7 @@ export default async function handler(req, res) {
       "생물학", "생물학실험", "생명과학을 위한 수학/고급수학+수연",
       "화학/고급화학", "화학실험"
     ];
-    const foreignLanguageOptions = ["고급여어", "대학영어1", "대학영어2", "외국어1", "외국어2"];
+    const foreignLanguageOptions = ["고급영어", "대학영어1", "대학영어2", "외국어1", "외국어2"];
     const completedLiberalArts = [];
     const remainingLiberalArts = [];
 
@@ -168,7 +168,6 @@ export default async function handler(req, res) {
       remainingLiberalArts.push(`영어/외국어 (${neededLanguages}과목 추가 필요)`);
 
     analysisResult["필수 교양"] = {
-      description: "고정 8과목 + 외국어 2과목을 모두 이수해야 합니다.",
       displayType: "list_all",
       completed: completedLiberalArts,
       remaining: remainingLiberalArts
@@ -212,45 +211,59 @@ export default async function handler(req, res) {
     };
 
     // ======================================================
-    // 6. 예체능 (신규)
-    // ======================================================
-    const allArtsAndSportsCourses = [
-      "건강과 삶", "골프", "교양연주", "농구", "댄스스포츠", "도예",
-      "배구", "배드민턴", "소묘", "수묵화", "수영", "수채화", "야구",
-      "양궁", "에어로빅", "운동과 건강", "운동과 영양", "체력단련",
-      "축구", "탁구", "태권도", "테니스", "핸드볼", "호신술",
-      "현대사회와 스포츠", "한국무용"
-    ];
-    const twoCreditArts = ["도예", "소묘", "수묵화", "수채화"];
-    const requiredArtsCredits = 3;
+   // ======================================================
+// 6. 예체능 (index.html 기준으로 수정됨)
+// ======================================================
+// ❗️ index.html의 <option> value와 정확히 일치하는 목록
+const allArtsAndSportsCourses = [
+    "교양연주-가야금", "교양연주-거문고", "교양연주-단소", "교양연주-색소폰1",
+    "교양연주-합창", "교양연주-해금", "건강과 삶", "골프초급", "교양연주",
+    "농구초급", "달리기와 건강", "댄스스포츠", "도예의 기초", "배구",
+    "배드민턴초급", "소묘의 기초", "수묵화의 기초", "수영 1", "수영 2",
+    "수영 3", "수영 4", "수영 5", "수채화의 기초", "야구", "양궁", "에어로빅",
+    "운동과 건강", "운동과 영양", "체력단련", "축구", "탁구초급", "탁구중급",
+    "태권도", "테니스초급", "테니스중급", "핸드볼", "호신술", "한국무용", "현대무용"
+];
 
-    let totalArtsCredits = 0;
-    const completedArtsCourses = [];
-    const recommendedArtsCourses = [];
+// ❗️ 2학점 과목 목록 (index.html 기준)
+const twoCreditArts = ["도예의 기초", "소묘의 기초", "수묵화의 기초", "수채화의 기초"];
 
-    allArtsAndSportsCourses.forEach(course => {
-      if (allText.includes(course)) {
+const requiredArtsCredits = 3;
+let totalArtsCredits = 0;
+const completedArtsCourses = [];
+const recommendedArtsCourses = [];
+
+// ❗️ (이하 로직은 수정할 필요 없이 동일합니다)
+allArtsAndSportsCourses.forEach(course => {
+    if (allText.includes(course)) {
         completedArtsCourses.push(course);
+        // 2학점 과목이면 2를, 아니면 1을 더합니다.
         totalArtsCredits += twoCreditArts.includes(course) ? 2 : 1;
-      } else {
+    } else {
         recommendedArtsCourses.push(course);
-      }
-    });
+    }
+});
 
-    const extraArtsCredits = (allText.match(/음미대, 미학과 전공\/교양/g) || []).length;
-    if (extraArtsCredits > 0) totalArtsCredits += extraArtsCredits;
+// "음미대, 미학과" 추가 학점을 계산합니다.
+const extraArtsCredits = (allText.match(/음미대, 미학과 전공\/교양/g) || []).length;
+if (extraArtsCredits > 0) {
+    totalArtsCredits += extraArtsCredits;
+    // 이수한 과목 목록에 추가하여 사용자에게 보여줍니다.
+    completedArtsCourses.push(`음미대/미학과 (${extraArtsCredits}학점)`);
+}
 
-    const remainingArtsCredits = Math.max(0, requiredArtsCredits - totalArtsCredits);
+// 남은 학점을 계산합니다.
+const remainingArtsCredits = Math.max(0, requiredArtsCredits - totalArtsCredits);
 
-    analysisResult["예체능"] = {
-      description: "예체능 과목 또는 음미대 교양을 포함해 3학점 이상 이수해야 합니다.",
-      displayType: "credit_count",
-      completed: completedArtsCourses,
-      recommended: recommendedArtsCourses,
-      completedCredits: totalArtsCredits,
-      requiredCredits: requiredArtsCredits,
-      remainingCredits: remainingArtsCredits
-    };
+analysisResult["예체능"] = {
+    description: "3학점 이상 이수해야 합니다. (*도예의 기초, 소묘의 기초, 수묵화의 기초, 수채화의 기초-2학점, 그외 1학점)",
+    displayType: "credit_count", // '전공 선택'과 동일한 표시 형식을 사용
+    completed: completedArtsCourses,
+    recommended: recommendedArtsCourses,
+    completedCredits: totalArtsCredits,
+    requiredCredits: requiredArtsCredits,
+    remainingCredits: remainingArtsCredits
+};
 
     // ✅ 최종 반환
     return res.status(200).json({ success: true, analysisResult });
