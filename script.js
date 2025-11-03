@@ -190,7 +190,7 @@ function displayResults(data) {
                     
                     // ❗️ [수정] 버튼 텍스트를 'category' 변수와 'details'를 사용하도록 수정
                     html += `<button class="toggle-button" onclick="toggleCourseList('${elementId}')">
-                                 <${category}> 과목 목록
+                                 〈${category}〉 과목 목록
                              </button>`;
                     
                     const courseListHtml = details.recommended.map(course => `<li>${course}</li>`).join('');
@@ -226,7 +226,7 @@ function displayResults(data) {
                         const elementId = `courses-list-${groupName.replace(/[^a-zA-Z0-9]/g, '')}`; 
                         
                         // ❗️ [수정] 꺾쇠(<, >) 오류 수정 및 과목 개수 추가
-                        html += `<button class="toggle-button" onclick="toggleCourseList('${elementId}')"><${groupName}> 과목 목록</button>`;
+                        html += `<button class="toggle-button" onclick="toggleCourseList('${elementId}')">〈${groupName}〉 과목 목록</button>`;
                     }
 
                     for (const groupName of details.remainingGroups) {
