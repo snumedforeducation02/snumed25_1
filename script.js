@@ -8,7 +8,6 @@ const electiveSelectElement = document.getElementById('elective-courses-select')
 const choices = new Choices(electiveSelectElement, {
     removeItemButton: true,
     placeholder: true,
-    // 이 텍스트가 잘리지 않도록 CSS에서 너비를 확보합니다.
     placeholderValue: '수강한 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
     duplicateItemsAllowed: false,
@@ -20,7 +19,6 @@ const academiaChoices = new Choices(academiaSelectElement, {
     placeholder: true,
     placeholderValue: '수강한 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
-    // 학문의 세계는 개수 제한이 없으므로 maxItemCount 옵션은 제외
 });
 // --- 3. '예체능' Choices.js 초기화 추가 ---
 const artsSelectElement = document.getElementById('arts-and-sports-select');
@@ -29,9 +27,7 @@ const artsChoices = new Choices(artsSelectElement, {
     placeholder: true,
     placeholderValue: '수강한 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
-    // 예체능은 개수 제한이 없으므로 maxItemCount는 제외
 });
-// ===================================
 // --- 4. '외국어' Choices.js 초기화 추가 ---
 const languageSelectElement = document.getElementById('foreign-language-select');
 const languageChoices = new Choices(languageSelectElement, {
@@ -39,12 +35,23 @@ const languageChoices = new Choices(languageSelectElement, {
     placeholder: true,
     placeholderValue: '수강한 외국어 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
-    maxItemCount: 2, // 최대 2개까지 선택 가능
+    maxItemCount: 2,
     maxItemText: (maxItemCount) => `2개까지만 선택할 수 있습니다.`,
 });
 
+// '분석 시작!' 버튼 클릭 이벤트
 analyzeButton.addEventListener('click', async () => {
-    
+    // 월 1회 사용 제한 로직 (기존 코드)
+    const lastUsed = localStorage.getItem('lastAnalysisTime');
+    const now = new Date();
+    if (lastUsed) {
+        const lastUsedDate = new Date(parseInt(lastUsed));
+        if (now.getFullYear() === lastUsedDate.getFullYear() && now.getMonth() === lastUsedDate.getMonth()) {
+            alert('이 기능은 한 달에 한 번만 사용할 수 있습니다.');
+            return; // 함수 실행 중단
+        }
+    }
+
     // 로딩 UI 표시
     loadingIndicator.classList.remove('hidden');
     resultArea.innerHTML = '';
@@ -90,23 +97,33 @@ analyzeButton.addEventListener('click', async () => {
         }
         
         // 1-8. 음미대/미학과
+        // ❗️❗️ HTML 수정 확인: index.html의 숫자 입력칸 id가 "extra-artsandsports-count"인지 확인하세요!
         const extraAnSCheckbox = document.getElementById('extra-artsandsports-checkbox');
-        const extraAnSCountInput = document.getElementById('extra-artsandsports-count'); // (index.html ID도 수정해야 함)
-        if (extraAnSCheckbox.checked && extraAnSCountInput.value) {
+        const extraAnSCountInput = document.getElementById('extra-artsandsports-count'); 
+        
+        // ❗️❗️ 오류 수정: extraAnSCountInput이 null일 때 .value 접근을 방지
+        if (extraAnSCheckbox && extraAnSCheckbox.checked && extraAnSCountInput && extraAnSCountInput.value) {
             const count = parseInt(extraAnSCountInput.value, 10) || 0;
             for (let i = 0; i < count; i++) {
                 completedCourses.push('음미대, 미학과 전공/교양');
             }
         }
 
-        // ❗️❗️❗️ 올바른 위치: 모든 과목 수집 후 allText 생성 ❗️❗️❗️
+        // ❗️❗️❗️ [버그 수정 1]
+        // allText는 모든 과목 수집이 끝난 후, fetch 직전에 선언되어야 합니다.
         const allText = completedCourses.join(' ');
 
         // --- 2. 비교과 체크리스트 데이터 수집 ---
+        // ❗️❗️❗️ [버그 수정 2]
+        // 누락되었던 모든 비교과 항목을 다시 추가합니다.
         const checklistData = {
             'volunteer': document.getElementById('volunteer').checked,
             'cpr': document.getElementById('cpr').checked,
-            // ... (나머지 비교과) ...
+            'leadership': document.getElementById('leadership').checked,
+            'reading': document.getElementById('reading').checked,
+            'human': document.getElementById('human').checked,
+            'study': document.getElementById('study').checked,
+            'cpm': document.getElementById('cpm').checked,
             'teps': document.getElementById('teps').checked,
         };
 
@@ -114,28 +131,32 @@ analyzeButton.addEventListener('click', async () => {
         const response = await fetch('/.netlify/functions/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: allText, checklist: checklistData }), // ✅ allText가 올바르게 전송됨
+            // allText가 'undefined'가 아닌 올바른 문자열로 전송됩니다.
+            body: JSON.stringify({ text: allText, checklist: checklistData }),
         });
 
         if (!response.ok) {
-            // (서버가 진짜 오류나면 여기서 걸림)
-            throw new Error('서버에서 오류가 발생했습니다.');
+            // 서버가 500 오류 등을 반환하면 여기서 감지됩니다.
+            throw new Error('서버에서 오류가 발생했습니다.'); 
         }
 
         const data = await response.json();
         displayResults(data); // 결과 표시
 
-        // ... (localStorage 저장) ...
+        // 분석 성공 시 마지막 사용 시간 저장
+        localStorage.setItem('lastAnalysisTime', now.getTime());
 
     } catch (error) {
         console.error('분석 중 오류 발생:', error);
-        resultArea.innerHTML = `<p class="error">분석에 실패했습니다: ${error.message}</p>`;
+        // ❗️(수정) 사용자에게 더 친절한 오류 메시지 표시 (null 접근 오류 등)
+        resultArea.innerHTML = `<p class="error">분석에 실패했습니다. 모든 항목을 올바르게 선택/입력했는지 확인해주세요. (오류: ${error.message})</p>`;
     } finally {
-        // ... (로딩 UI 숨기기) ...
+        // 로딩 UI 숨기기
+        loadingIndicator.classList.add('hidden');
     }
 });
 
-// 분석 결과를 HTML로 만들어 화면에 표시하는 함수 (기존 코드와 동일)
+// 분석 결과를 HTML로 만들어 화면에 표시하는 함수
 function displayResults(data) {
     let html = '<h2>🔍 분석 결과</h2>';
     const categoryOrder = ["전공 필수", "전공 선택", "필수 교양", "학문의 세계", "예체능", "기타 이수 과목", "비교과"];
@@ -173,27 +194,21 @@ function displayResults(data) {
                 html += `<p><strong>📝 미이수 항목:</strong> ${uniqueRemainingItems.length > 0 ? uniqueRemainingItems.join(', ') : '모두 이수 완료'}</p>`;
                 break;
 
-          case 'count':
-    const completedCount = details.completed.length;
-    const requiredCount = details.requiredCount;
-    const isCompleted = completedCount >= requiredCount;
-    // 남은 과목 개수를 계산합니다. (0보다 작아지지 않도록)
-    const neededCount = Math.max(0, requiredCount - completedCount);
+            case 'count':
+                const completedCount = details.completed.length;
+                const requiredCount = details.requiredCount;
+                const isCompleted = completedCount >= requiredCount;
+                const neededCount = Math.max(0, requiredCount - completedCount);
 
-    // 상태 메시지에 "남은 개수"를 추가합니다.
-    html += `<p class="summary ${isCompleted ? 'completed' : 'in-progress'}">
-                <strong>상태: ${requiredCount}개 중 ${completedCount}개 이수 (${neededCount}개 남음) ${isCompleted ? '✔️' : ''}</strong>
-             </p>`;
+                html += `<p class="summary ${isCompleted ? 'completed' : 'in-progress'}">
+                             <strong>상태: ${requiredCount}개 중 ${completedCount}개 이수 (${neededCount}개 남음) ${isCompleted ? '✔️' : ''}</strong>
+                         </p>`;
+                if (completedCount > 0) {
+                    html += `<p><strong>✅ 이수한 과목:</strong> ${details.completed.join(', ')}</p>`;
+                }
+                break;
 
-    // 이수한 과목 목록은 그대로 표시합니다.
-    if (completedCount > 0) {
-        html += `<p><strong>✅ 이수한 과목:</strong> ${details.completed.join(', ')}</p>`;
-    }
-    break;
-
-                // 이 코드를 displayResults 함수의 switch 문 내부에 추가하세요.
-
-            case 'credit_count': // ★ 새로 추가된 케이스
+            case 'credit_count': // '전공 선택' 및 '예체능'
                 const isCreditsCompleted = details.remainingCredits === 0;
                 
                 html += `<p class="summary ${isCreditsCompleted ? 'completed' : 'in-progress'}">
@@ -205,29 +220,11 @@ function displayResults(data) {
                 }
                 
                 if (details.recommended.length > 0 && !isCreditsCompleted) {
-                    // 수료 학점을 다 채우지 못했을 때만 추천 과목을 보여줌
                     html += `<p><strong>💡 추천 과목:</strong> ${details.recommended.join(', ')}</p>`;
                 }
                 break;
-// --- 여기까지 추가 ---
 
-            case 'group_count':
-                const isGroupCompleted = details.completedCount >= details.requiredCount;
-                html += `<p class="summary ${isGroupCompleted ? 'completed' : 'in-progress'}">
-                            <strong>상태: 5개 영역 중 ${details.completedCount}개 영역 이수 (3개 이상 필요) ${isGroupCompleted ? '✔️' : ''}</strong>
-                         </p>`;
-                if (details.completed.length > 0) {
-                    const completedCoursesWithGroup = details.completed.map(c => `${c.name} (${c.group})`);
-                    html += `<p><strong>✅ 이수한 과목 (영역):</strong> ${completedCoursesWithGroup.join(', ')}</p>`;
-                }
-                if (details.remaining.length > 0) {
-                    html += `<p><strong>📝 남은 영역:</strong> ${details.remaining.join(', ')}</p>`;
-                }
-                break;
-                
-// displayResults 함수 내부의 switch 문에 이 case를 추가하세요.
-
-            case 'academia_group_count': // ★ 새로 추가된 케이스
+            case 'academia_group_count': // '학문의 세계'
                 const isGroupMet = details.completedGroupCount >= details.requiredGroupCount;
                 const isCreditMet = details.totalAcademiaCredits >= details.requiredCredits;
                 
@@ -265,7 +262,7 @@ function displayResults(data) {
                                      ${groupName} 과목 목록 보기 (${coursesInGroup.length}개)
                                  </button>`;
                         
-                        // 숨겨진 과목 목록 Div (인라인 스타일로 display: none 처리)
+                        // 숨겨진 과목 목록 Div
                         html += `<div id="${elementId}" class="course-list-hidden" style="display: none; margin: 5px 0 10px 10px; padding: 8px; background: #f9f9f9; border: 1px solid #eee; border-radius: 4px;">
                                      ${coursesInGroup.join(', ')}
                                  </div>`;
@@ -276,31 +273,35 @@ function displayResults(data) {
                 
             case 'list_completed_only':
                 if (details.completed.length > 0) {
-                  html += `<p><strong>✅ 이수한 과목:</strong> ${details.completed.join(', ')}</p>`;
+                    html += `<p><strong>✅ 이수한 과목:</strong> ${details.completed.join(', ')}</p>`;
                 } else {
-                  html += `<p>이수한 과목이 없습니다.</p>`;
+                    html += `<p>이수한 과목이 없습니다.</p>`;
                 }
                 break;
                 
-            case 'checklist':
+            case 'checklist': // '비교과'
                 const requiredKeys = ['volunteer', 'cpr', 'leadership', 'reading'];
                 const reqCompleted = [];
                 const reqIncomplete = [];
                 const elecCompleted = [];
                 const requiredElecCount = 2;
 
+                // ❗️❗️ [버그 수정 3]
+                // 1. 이수한 항목(details.data)을 기준으로 순회
                 for (const key in details.data) {
-                    const label = checklistLabels[key];
-                    if (requiredKeys.includes(key)) {
-                        if (details.data[key]) {
+                    if (details.data[key]) { // true (체크된) 항목만 처리
+                        const label = checklistLabels[key];
+                        if (requiredKeys.includes(key)) {
                             reqCompleted.push(label);
                         } else {
-                            reqIncomplete.push(label);
-                        }
-                    } else {
-                        if (details.data[key]) {
                             elecCompleted.push(label);
                         }
+                    }
+                }
+                // 2. 미이수 필수 항목을 찾기 위해 *전체* 필수 목록을 순회
+                for (const key of requiredKeys) {
+                    if (!details.data[key]) { // false (미체크) 또는 undefined
+                        reqIncomplete.push(checklistLabels[key]);
                     }
                 }
                 
@@ -311,7 +312,7 @@ function displayResults(data) {
                 const isElecCompleted = neededElecCount === 0;
 
                 html += `<p class="summary ${isElecCompleted ? 'completed' : 'in-progress'}">
-                            <strong>선택 요건 상태: ${requiredElecCount}개 이상 중 ${elecCompleted.length}개 완료 (${neededElecCount}개 더 필요) ${isElecCompleted ? '✔️' : ''}</strong>
+                             <strong>선택 요건 상태: ${requiredElecCount}개 이상 중 ${elecCompleted.length}개 완료 (${neededElecCount}개 더 필요) ${isElecCompleted ? '✔️' : ''}</strong>
                          </p>`;
                 if (elecCompleted.length > 0) {
                     html += `<p><strong>✅ 완료한 선택 요건:</strong> ${elecCompleted.join(', ')}</p>`;
@@ -322,9 +323,6 @@ function displayResults(data) {
     }
     resultArea.innerHTML = html;
 }
-// ===================================================
-//   ⬇️ 이 함수를 script.js 파일 맨 아래에 추가하세요 ⬇️
-// ===================================================
 
 /**
  * 토글 버튼 클릭 시 과목 목록을 보여주거나 숨깁니다.
@@ -340,4 +338,3 @@ function toggleCourseList(elementId) {
         }
     }
 }
-
