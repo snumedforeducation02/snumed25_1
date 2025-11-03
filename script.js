@@ -42,17 +42,7 @@ const languageChoices = new Choices(languageSelectElement, {
 
 // '분석 시작!' 버튼 클릭 이벤트
 analyzeButton.addEventListener('click', async () => {
-    // 월 1회 사용 제한 로직
-    const lastUsed = localStorage.getItem('lastAnalysisTime');
-    const now = new Date();
-    if (lastUsed) {
-        const lastUsedDate = new Date(parseInt(lastUsed));
-        if (now.getFullYear() === lastUsedDate.getFullYear() && now.getMonth() === lastUsedDate.getMonth()) {
-            alert('이 기능은 한 달에 한 번만 사용할 수 있습니다.');
-            return; 
-        }
-    }
-
+    
     // 로딩 UI 표시
     loadingIndicator.classList.remove('hidden');
     resultArea.innerHTML = '';
