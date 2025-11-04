@@ -329,6 +329,45 @@ analysisResult["선택 수료 요건"] = {
     neededCount: neededElectiveCount,
     labels: electiveLabels
 };
+// 1. 전공 선택 초과 학점 (최대 7학점)
+    // (remainingCredits는 음수가 될 수 없으므로, total - required로 계산)
+    let excessElectiveCredits = Math.max(0, totalElectiveCredits - requiredElectiveCredits);
+    const ELECTIVE_CAP = 7;
+    if (excessElectiveCredits > ELECTIVE_CAP) {
+        excessElectiveCredits = ELECTIVE_CAP;
+    }
+
+    // 2. 학문의 세계 초과 학점 (캡 없음)
+    let excessAcademiaCredits = Math.max(0, totalAcademiaCredits - requiredAcademiaCredits);
+
+    // 3. 예체능 초과 학점 (캡 없음)
+    let excessArtsCredits = Math.max(0, totalArtsCredits - requiredArtsCredits);
+
+    // 4. 사용자가 직접 입력한 '기타 학점'
+    // (script.js가 "기타 학점" 문자열을 N개 보내줌)
+    const otherCredits = (allText.match(/기타 학점/g) || []).length;
+
+    // 5. 총합 계산
+    const requiredOtherCredits = 12;
+    const totalOtherCredits = excessElectiveCredits + excessAcademiaCredits + excessArtsCredits + otherCredits;
+    const remainingOtherCredits = Math.max(0, requiredOtherCredits - totalOtherCredits);
+
+    // 6. 설명 텍스트 생성
+    // (요청하신 "일반 교양 5학점"은 사용자가 입력한 otherCredits 값으로 대체합니다)
+    const otherDescription = `
+        *일반 교양 ${otherCredits}학점 + 
+        기타(전선 초과 ${excessElectiveCredits}학점 + 
+        학문의세계 초과 ${excessAcademiaCredits}학점 + 
+        예체능 초과 ${excessArtsCredits}학점)
+    `;
+
+    analysisResult["기타"] = {
+        description: otherDescription,
+        displayType: "credit_count_simple", // ★ 새로운 타입
+        completedCredits: totalOtherCredits,
+        requiredCredits: requiredOtherCredits,
+        remainingCredits: remainingOtherCredits
+    };
 
     // ✅ 최종 반환
     return res.status(200).json({ success: true, analysisResult });
