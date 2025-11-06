@@ -29,6 +29,14 @@ const artsChoices = new Choices(artsSelectElement, {
     placeholderValue: '수강한 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
 });
+const veritasSelectElement = document.getElementById('veritas-courses-select');
+const veritasChoices = new Choices(veritasSelectElement, {
+    removeItemButton: true,
+    placeholder: true,
+    placeholderValue: '수강한 과목을 검색 및 선택하세요',
+    searchPlaceholderValue: '과목 검색...',
+    duplicateItemsAllowed: false,
+});
 const languageSelectElement = document.getElementById('foreign-language-select');
 const languageChoices = new Choices(languageSelectElement, {
     removeItemButton: true,
@@ -59,6 +67,8 @@ analyzeButton.addEventListener('click', async () => {
         completedCourses.push(...selectedLanguages);
         const selectedAcademia = academiaChoices.getValue(true);
         completedCourses.push(...selectedAcademia);
+        const selectedVeritas = veritasChoices.getValue(true); 
+        completedCourses.push(...selectedVeritas);
         const selectedArts = artsChoices.getValue(true);
         completedCourses.push(...selectedArts);
         
@@ -132,7 +142,7 @@ function displayResults(data) {
     
     const categoryOrder = [
         "전공 필수", "전공 선택", "필수 교양", 
-        "학문의 세계", "예체능", "기타",
+        "지성의 열쇠", "베리타스", "예체능", "기타",
         "필수 수료 요건", "선택 수료 요건"
     ];
     
