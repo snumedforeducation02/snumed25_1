@@ -29,14 +29,6 @@ const artsChoices = new Choices(artsSelectElement, {
     placeholderValue: '수강한 과목을 검색 및 선택하세요',
     searchPlaceholderValue: '과목 검색...',
 });
-const veritasSelectElement = document.getElementById('veritas-courses-select');
-const veritasChoices = new Choices(veritasSelectElement, {
-    removeItemButton: true,
-    placeholder: true,
-    placeholderValue: '수강한 과목을 검색 및 선택하세요',
-    searchPlaceholderValue: '과목 검색...',
-    duplicateItemsAllowed: false,
-});
 const languageSelectElement = document.getElementById('foreign-language-select');
 const languageChoices = new Choices(languageSelectElement, {
     removeItemButton: true,
@@ -67,8 +59,11 @@ analyzeButton.addEventListener('click', async () => {
         completedCourses.push(...selectedLanguages);
         const selectedAcademia = academiaChoices.getValue(true);
         completedCourses.push(...selectedAcademia);
-        const selectedVeritas = veritasChoices.getValue(true); 
-        completedCourses.push(...selectedVeritas);
+        const veritasCheckbox = document.getElementById('veritas-completed-check');
+        if (veritasCheckbox && veritasCheckbox.checked) {
+        // 체크되면, analyze.js에서 3학점으로 인식할 고유 ID를 추가
+        completedCourses.push(veritasCheckbox.value); 
+        }
         const selectedArts = artsChoices.getValue(true);
         completedCourses.push(...selectedArts);
         
