@@ -64,11 +64,86 @@ const allAcademiaCourses = [
 {"name": "부모교육", "group": "인간의 이해와 사회 분석"}, {"name": "친밀성과 가족", "group": "인간의 이해와 사회 분석"}, {"name": "행복한 삶과 사회복지", "group": "인간의 이해와 사회 분석"},  
 {"name": "현대국가와 행정", "group": "인간의 이해와 사회 분석"}, {"name": "현대사회와 국제어", "group": "인간의 이해와 사회 분석"}, {"name": "현대사회와 법", "group": "인간의 이해와 사회 분석"},  
 {"name": "현대사회의 생로병사", "group": "인간의 이해와 사회 분석"}, {"name": "현대정치의 이해", "group": "인간의 이해와 사회 분석"}
+{"name": "공간정보와 시각화", "group": "과학적 사고와 응용 분야"},
+    {"name": "과학과 비판적 사고", "group": "과학적 사고와 응용 분야"},
+    {"name": "과학의 철학적 이해", "group": "과학적 사고와 응용 분야"},
+    {"name": "기술과 경제", "group": "과학적 사고와 응용 분야"},
+    {"name": "말과 마음", "group": "과학적 사고와 응용 분야"},
+    {"name": "미시세계와 거시세계", "group": "과학적 사고와 응용 분야"},
+    {"name": "바다과학기행", "group": "과학적 사고와 응용 분야"},
+    {"name": "불확실성의 세계와 통계학", "group": "과학적 사고와 응용 분야"},
+    {"name": "불확실성의 수학적 이해", "group": "과학적 사고와 응용 분야"},
+    {"name": "삶의 혁명-생명공학", "group": "과학적 사고와 응용 분야"},
+    {"name": "생활구강건강관리", "group": "과학적 사고와 응용 분야"},
+    {"name": "서양문명과 과학기술", "group": "과학적 사고와 응용 분야"},
+    {"name": "세계와 지역의 환경문제", "group": "과학적 사고와 응용 분야"},
+    {"name": "식생활과 환경", "group": "과학적 사고와 응용 분야"},
+    {"name": "약과 건강", "group": "과학적 사고와 응용 분야"},
+    {"name": "양자개념과 인류문명", "group": "과학적 사고와 응용 분야"},
+    {"name": "에너지", "group": "과학적 사고와 응용 분야"},
+    {"name": "역사속의 과학", "group": "과학적 사고와 응용 분야"},
+    {"name": "영양과 건강", "group": "과학적 사고와 응용 분야"},
+    {"name": "외계행성과 생명", "group": "과학적 사고와 응용 분야"},
+    {"name": "우주의 진화", "group": "과학적 사고와 응용 분야"},
+    {"name": "인간과 우주", "group": "과학적 사고와 응용 분야"},
+    {"name": "인간과 지구환경", "group": "과학적 사고와 응용 분야"},
+    {"name": "인공지능과 철학", "group": "과학적 사고와 응용 분야"},
+    {"name": "인체생물학", "group": "과학적 사고와 응용 분야"},
+    {"name": "인터넷 보안과 프라이버시", "group": "과학적 사고와 응용 분야"},
+    {"name": "자연재해의 관측과 이해", "group": "과학적 사고와 응용 분야"},
+    {"name": "자연환경과 인간", "group": "과학적 사고와 응용 분야"},
+    {"name": "지구의 이해", "group": "과학적 사고와 응용 분야"},
+    {"name": "지구환경변화", "group": "과학적 사고와 응용 분야"},
+    {"name": "컴퓨터과학이 여는 세계", "group": "과학적 사고와 응용 분야"},
+    {"name": "화산과 지진", "group": "과학적 사고와 응용 분야"},
+    {"name": "기하학의 그리스적 발견", "group": "과학적 사고와 응용 분야"}
 ];
 // 마찬가지로, 학문의 세계 영역 명을 변경하고 싶은 경우, 아래를 수정해주세요. 이때, 위 과목 group 옆 이름과 아래 영역 이름이 동일해야 합니다.
 const allAcademiaGroups = [
-    "문화 해석과 상상", "역사적 탐구와 철학적 사유", "인간의 이해와 사회 분석"
-];        
+    "문화 해석과 상상", "역사적 탐구와 철학적 사유", "인간의 이해와 사회 분석", "과학적 사고와 응용 분야"
+];  
+ const allExtensionCourses = [
+    {"name": "10억불분자", "credit": 3}, {"name": "21세기 한국소설의 이해", "credit": 3}, {"name": "경제학개론", "credit": 3},
+    {"name": "곤충과 인간", "credit": 3}, {"name": "과학기술과 대중문화", "credit": 3}, {"name": "과학기술과 사회", "credit": 3},
+    {"name": "관악모둠강좌: 공동체", "credit": 3}, {"name": "관악모둠강좌(인물)", "credit": 3}, {"name": "관악모둠강좌(주제)", "credit": 3},
+    {"name": "굿 라이프 심리학", "credit": 3}, {"name": "기후변화와 건강", "credit": 3}, {"name": "도시의 이해", "credit": 3},
+    {"name": "동서양의 종교적 지혜", "credit": 3}, {"name": "드라마의 이해와 감상", "credit": 3}, {"name": "매체로 보는 서양사", "credit": 3},
+    {"name": "명상과 수행", "credit": 3}, {"name": "문명과 수학", "credit": 3}, {"name": "문제는 통계야 : 빅데이터 시대의 데이터 문해력", "credit": 3},
+    {"name": "문화와 질병", "credit": 3}, {"name": "미래의 교통, 스마트 모빌리티", "credit": 3}, {"name": "미술명작의 이해", "credit": 3},
+    {"name": "민주주의와 시민의 역사", "credit": 3}, {"name": "범죄와 형벌", "credit": 3}, {"name": "북한학개론", "credit": 3},
+    {"name": "불교철학의 이해", "credit": 3}, {"name": "비만과 건강관리", "credit": 3}, {"name": "빅데이터의 이해", "credit": 3},
+    {"name": "사람 뇌의 구조와 기능", "credit": 3}, {"name": "사진 속 지리여행", "credit": 3}, {"name": "사회주의의 역사", "credit": 3},
+    {"name": "서양미술의 이해", "credit": 3}, {"name": "서양음악의 이해", "credit": 3}, {"name": "성서와 기독교 사상의 이해", "credit": 3},
+    {"name": "소리의 과학과 악기제작 체험", "credit": 3}, {"name": "시민생활의 법적 이해", "credit": 3}, {"name": "시장경제와 법", "credit": 3},
+    {"name": "신화와 역사", "credit": 3}, {"name": "심리학개론", "credit": 3}, {"name": "언어의 이해", "credit": 3},
+    {"name": "예술과 지식재산", "credit": 3}, {"name": "우리 몸의 이해", "credit": 3}, {"name": "융합주제강좌: 공존", "credit": 3},
+    {"name": "융합주제강좌: 과학기술과 미래", "credit": 3}, {"name": "융합주제강좌: 권리와 의무", "credit": 3}, {"name": "융합주제강좌: 기술혁신", "credit": 3},
+    {"name": "융합주제강좌: 미래", "credit": 3}, {"name": "융합주제강좌: 생명", "credit": 3}, {"name": "융합주제강좌: 자유와 선택", "credit": 3},
+    {"name": "음악 속의 철학", "credit": 3}, {"name": "음악의 원리", "credit": 3}, {"name": "인간과 종교", "credit": 3},
+    {"name": "인간관계의 심리학", "credit": 3}, {"name": "인간생명과학개론", "credit": 3}, {"name": "인간생활과 경제", "credit": 3},
+    {"name": "일본대중문화", "credit": 3}, {"name": "정보사회와 수학", "credit": 3}, {"name": "정의와 법", "credit": 3},
+    {"name": "정책학의 이해", "credit": 3}, {"name": "종교와 영화", "credit": 3}, {"name": "종교학의 이해", "credit": 3},
+    {"name": "죽음의 과학적 이해", "credit": 3}, {"name": "진화와 인간사회", "credit": 3}, {"name": "참살이의학특강", "credit": 3},
+    {"name": "창조와 디자인", "credit": 3}, {"name": "테크놀러지와 예술: 전시·예술·공학", "credit": 3}, {"name": "특허와 기술창업", "credit": 3},
+    {"name": "한국 경제를 위한 창의적 아이디어", "credit": 3}, {"name": "한국음악의 이해", "credit": 3}, {"name": "함께 사는 법 – 노동, 복지 그리고 삶", "credit": 3},
+    {"name": "현대경제의 이해", "credit": 3}, {"name": "현대도시건축산책", "credit": 3}, {"name": "현대문화와 기독교", "credit": 3},
+    {"name": "현대음악의 이해", "credit": 3}, {"name": "환경과 건강", "credit": 3}, {"name": "환경과 기후변화의 미래", "credit": 3},
+    {"name": "언어와 인간", "credit": 3}, {"name": "인류와 식량", "credit": 3}, {"name": "생활 속의 반도체", "credit": 3},
+    {"name": "숲의 이해", "credit": 3}, {"name": "고전에 길을 묻다", "credit": 3}, {"name": "사회 속의 어린이 이해", "credit": 3},
+    {"name": "앎의 이해", "credit": 3}, {"name": "연극과 감정 표현", "credit": 3}, {"name": "웃음의 이해", "credit": 3},
+    {"name": "장애학의 이해", "credit": 3}, {"name": "퀴어문학", "credit": 3}, {"name": "동아시아 불교문화", "credit": 3},
+    {"name": "두 개의 한국: 근대한국의 역사와 사회", "credit": 3}, {"name": "세계음악", "credit": 3}, {"name": "한국근대소설의 이해", "credit": 3},
+    {"name": "한국문학입문", "credit": 3}, {"name": "한국법의 이해", "credit": 3}, {"name": "한국어와 한국문화", "credit": 3},
+    {"name": "한국음악개론", "credit": 3}, {"name": "한국의 언어", "credit": 3}, {"name": "한복과 한국문화", "credit": 3},
+    {"name": "현대 동아시아 문화와 한문 서사의 재발견", "credit": 3}, {"name": "현대동아시아의 종교: 정체성과 갈등", "credit": 3}, {"name": "현대한국의 삶과 문화", "credit": 3},
+    {"name": "그린리더십", "credit": 3}, {"name": "그린리더십 인턴십", "credit": 3}, {"name": "지속가능한 생활디자인", "credit": 3},
+    // 학점 예외 과목
+    {"name": "산과 인생-2학점", "credit": 2}, {"name": "생활원예-2학점", "credit": 2}, {"name": "신체활동의 이해와 실습-2학점", "credit": 2},
+    {"name": "자전거와 스포츠과학-2학점", "credit": 2}, {"name": "한국 수화 언어의 이해-2학점", "credit": 2}, 
+    {"name": "학생자율세미나: 주제-1학점", "credit": 1}, {"name": "학생자율세미나: 거주와 배움-1학점", "credit": 1}, 
+    {"name": "학생자율연구: 탐구-2학점", "credit": 2}, {"name": "학생자율연구: 심화-2학점", "credit": 2}, {"name": "학생자율연구: 실천-2학점", "credit": 2}
+];
+ 
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Only POST method allowed" });
@@ -193,27 +268,37 @@ export default async function handler(req, res) {
             remaining: remainingLiberalArts
         };
 
-        // ======================================================
-        // 5. 지성의 열쇠 영역명 및 과목명은 이 파일 맨 위에서 이미 기록이 되어있습니다! 수정을 원하는 경우, 그 부분을 수정해주세요.
+      // ======================================================
+        // 5. 💡 업데이트: 지성의 열쇠 & 지성의 확장 (통합 분석)
         // ======================================================
         const completedAcademiaCourses = [];
-        const completedGroups = new Set();
+        const completedExtensionCourses = []; // 지성의 확장 이수 과목
         const completedGroupCredits = {}; 
-        let totalAcademiaCredits = 0;
+        let totalAcademiaCredits = 0; // 지성의 열쇠 (4개 영역 합산) 학점
+        let totalExtensionCredits = 0; // 지성의 확장 학점
         const requiredAcademiaCredits = 9; 
         const requiredGroupCredit = 3; 
 
+        // 1. 지성의 열쇠 (4개 영역) 분석
         allAcademiaCourses.forEach(course => {
             if (allText.includes(course.name)) {
                 completedAcademiaCourses.push(course);
-                completedGroups.add(course.group);
-                totalAcademiaCredits += 3; 
                 completedGroupCredits[course.group] = (completedGroupCredits[course.group] || 0) + 3;
+                totalAcademiaCredits += 3; 
             }
         });
-
         
-        const remainingGroups = allAcademiaGroups.filter(groupName => (completedGroupCredits[groupName] || 0) < requiredGroupCredit);
+        // 2. 지성의 확장 분석 (학점 예외 처리 포함)
+        allExtensionCourses.forEach(course => {
+            if (allText.includes(course.name)) {
+                completedExtensionCourses.push(course);
+                totalExtensionCredits += course.credit;
+            }
+        });
+        
+        // 3. 필수 이수 영역 (문화 해석, 역사적 탐구, 인간의 이해) 체크
+        const coreAcademiaGroups = ["문화 해석과 상상", "역사적 탐구와 철학적 사유", "인간의 이해와 사회 분석"];
+        const remainingGroups = coreAcademiaGroups.filter(groupName => (completedGroupCredits[groupName] || 0) < requiredGroupCredit);
 
         const recommendedCoursesByGroup = {};
         remainingGroups.forEach(groupName => {
@@ -224,18 +309,21 @@ export default async function handler(req, res) {
 
         const isGroupMet = remainingGroups.length === 0;
 
-        analysisResult["지성의 열쇠"] = {
-            description: "3개 영역 모두에서 3학점 이상, 총 9학점 이상 이수해야 합니다. (모든 과목 3학점)",
-            displayType: "academia_group_count",
-            completedCourses: completedAcademiaCourses,
-            completedGroupCount: allAcademiaGroups.length - remainingGroups.length, 
-            requiredGroupCount: allAcademiaGroups.length, 
+        analysisResult["지성의 열쇠 & 지성의 확장"] = {
+            description: "지성의 열쇠 (문화 해석, 역사적 탐구, 인간의 이해) 3개 영역에서 각각 3학점 이상 이수해야 하며, 과학적 사고와 응용 분야 및 지성의 확장은 자유 선택 교양으로 간주됩니다.",
+            displayType: "academia_extension_group_count", // 새로운 displayType 사용
+            completedAcademiaCourses: completedAcademiaCourses,
+            completedExtensionCourses: completedExtensionCourses,
+            completedGroupCount: coreAcademiaGroups.length - remainingGroups.length, 
+            requiredGroupCount: coreAcademiaGroups.length, 
             totalAcademiaCredits,
+            totalExtensionCredits, // 지성의 확장 학점 별도 표시
             requiredCredits: requiredAcademiaCredits,
             remainingGroups,
             recommendedCoursesByGroup,
             isGroupMet
         };
+ 
 // ======================================================
 // 6. 베리타스 (3학점 이상) 
 // ======================================================
@@ -384,7 +472,10 @@ analysisResult["선택 수료 요건"] = {
         }
 
         let excessAcademiaCredits = Math.max(0, totalAcademiaCredits - requiredAcademiaCredits);
-        let excessVeritasCredits = Math.max(0, totalVeritasCredits - requiredVeritasCredits); // 👈 베리타스 초과 학점 포함
+        // 💡 지성의 확장은 필수가 아니므로, 이수한 학점 전체를 초과 학점으로 간주
+        let excessExtensionCredits = totalExtensionCredits; 
+        
+        let excessVeritasCredits = Math.max(0, totalVeritasCredits - requiredVeritasCredits); 
         let excessArtsCredits = Math.max(0, totalArtsCredits - requiredArtsCredits);
 
         const otherCredits = (allText.match(/기타 학점/g) || []).length;
@@ -392,13 +483,15 @@ analysisResult["선택 수료 요건"] = {
         const requiredOtherCredits = 12;
 
         // 초과 학점과 일반 교양 학점을 합산
-        const totalOtherCredits = excessElectiveCredits + excessAcademiaCredits + excessVeritasCredits + excessArtsCredits + otherCredits;
+        // 💡 지성의 열쇠 초과 학점 + 지성의 확장 전체 학점 포함
+        const totalOtherCredits = excessElectiveCredits + excessAcademiaCredits + excessExtensionCredits + excessVeritasCredits + excessArtsCredits + otherCredits;
         const remainingOtherCredits = Math.max(0, requiredOtherCredits - totalOtherCredits);
 
         const otherDescription = `
             *일반 교양 ${otherCredits}학점 + 
             기타(전선 초과 ${excessElectiveCredits}학점 + 
             지성의열쇠 초과 ${excessAcademiaCredits}학점 + 
+            지성의확장 ${totalExtensionCredits}학점 +
             베리타스 초과 ${excessVeritasCredits}학점 +
             예체능 초과 ${excessArtsCredits}학점)
         `;
